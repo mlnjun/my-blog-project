@@ -4,6 +4,10 @@ import Card from "@/components/Card";
 const BlogMain = () => {
   return (
     <div className="container">
+      {/* <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center p-4">
+        <h1 class="text-2xl font-bold">Welcome to Our Website!</h1>
+        <p class="mt-2">Sign up now to get the latest updates.</p>
+      </div> */}
       <p className="h1">테스트 텍스트입니다.</p>
       <p className="h2">테스트 텍스트입니다.</p>
       <p className="h3">테스트 텍스트입니다.</p>
