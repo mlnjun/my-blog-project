@@ -28,10 +28,10 @@ const page = () => {
           </div>
           <div className="flex mt-5 mx-auto gap-4 justify-between w-[45%]">
             <button>
-              <Image src={google} />
+              <Image src={google} alt="google" />
             </button>
             <button>
-              <Image src={naver} width={40} height={40} />
+              <Image src={naver} alt="naver" width={40} height={40} />
             </button>
           </div>
         </form>
