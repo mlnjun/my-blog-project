@@ -1,3 +1,6 @@
+import Link from "next/link";
+
+// 컴포넌트
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 
@@ -8,6 +11,12 @@ const BlogMain = () => {
         <h1 class="text-2xl font-bold">Welcome to Our Website!</h1>
         <p class="mt-2">Sign up now to get the latest updates.</p>
       </div> */}
+      <Link href="/list">
+        <Button>블로그 목록</Button>
+      </Link>
+
+      <hr />
+
       <p className="h1">테스트 텍스트입니다.</p>
       <p className="h2">테스트 텍스트입니다.</p>
       <p className="h3">테스트 텍스트입니다.</p>
