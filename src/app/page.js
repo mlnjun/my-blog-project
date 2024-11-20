@@ -14,6 +14,9 @@ const BlogMain = () => {
       <Link href="/list">
         <Button>블로그 목록</Button>
       </Link>
+      <Link href="/blog/create">
+        <Button type="secondary">블로그 생성</Button>
+      </Link>
 
       <hr />
 
