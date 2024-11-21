@@ -1,6 +1,6 @@
 import Image from "next/image";
-import google from "../assets/google_btn.svg";
-import naver from "../assets/naver_btn.svg";
+import google from "@/assets/google_btn.svg";
+import naver from "@/assets/naver_btn.svg";
 
 const page = () => {
   return (

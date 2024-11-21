@@ -3,7 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 
 const geistSans = localFont({
-  src: "./fonts/NotoSansKR-Regular.ttf",
+  src: "../fonts/NotoSansKR-Regular.ttf",
   variable: "--font-geist-sans",
   weight: "400 600",
 });
