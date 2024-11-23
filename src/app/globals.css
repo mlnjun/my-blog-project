@@ -14,3 +14,17 @@
   }
 }
 
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* tiptap editor 포커스 스타일 변경 */
+[contenteditable="true"]:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
