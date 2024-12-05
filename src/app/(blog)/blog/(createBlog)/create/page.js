@@ -2,9 +2,8 @@ import Editor from "@/components/Editor";
 
 const page = () => {
   return (
-    <div className="flex flex-col mt-4 mx-auto max-w-[1080px]">
-      {/* 콘텐츠 영역 */}
-      <div className="flex flex-col">
+    <div className="flex flex-col mx-auto max-w-[1080px] min-h-[calc(100vh-57px)]">
+      <div className="flex flex-col flex-1">
         <input
           className="h2 my-1.5 p-2 w-full bg-white rounded-lg min-h-[36px] max-md:max-w-full box-border border-[2px] border-transparent focus:border-primary focus:border-opacity-30 focus:outline-none"
           type="text"
@@ -38,9 +37,7 @@ const page = () => {
 
         <hr />
 
-        <hr />
-
-        <div className="mt-2">
+        <div className="flex-1">
           <Editor />
         </div>
       </div>
