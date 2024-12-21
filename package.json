@@ -16,13 +16,16 @@
     "@tiptap/pm": "^2.9.1",
     "@tiptap/react": "^2.9.1",
     "@tiptap/starter-kit": "^2.9.1",
+    "mysql2": "^3.11.5",
     "next": "15.0.3",
     "next-images": "^1.8.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "sequelize": "^6.37.5",
     "tailwindcss-scrollbar": "^0.1.0"
   },
   "devDependencies": {
+    "dotenv": "^16.4.7",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
