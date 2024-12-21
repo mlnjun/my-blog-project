@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Header = () => {
   return (
-    <header className="flex overflow-hidden flex-col justify-center items-center px-16 py-3.5 w-full border-[0.1px] bg-[#BDD0F9]  max-md:px-5 max-md:max-w-full">
+    <header className="flex absolute overflow-hidden flex-col justify-center items-center px-16 py-3.5 w-full border-[0.1px] bg-[#BDD0F9]  max-md:px-5 max-md:max-w-full">
       <div className="flex gap-5 justify-between max-w-full w-[1059px]">
         <div className="h5">
           <Link href="/">Blog</Link>

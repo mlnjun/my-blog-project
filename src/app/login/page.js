@@ -1,6 +1,4 @@
 import Image from "next/image";
-import google from "@/assets/google_btn.svg";
-import naver from "@/assets/naver_btn.svg";
 
 const page = () => {
   return (
@@ -28,10 +26,15 @@ const page = () => {
           </div>
           <div className="flex mt-5 mx-auto gap-4 justify-between w-[45%]">
             <button>
-              <Image src={google} alt="google" />
+              <Image
+                src="/icon/google_btn.svg"
+                alt="google"
+                width={40}
+                height={40}
+              />
             </button>
             <button>
-              <Image src={naver} alt="naver" width={40} height={40} />
+              <Image src="naver_btn.svg" alt="naver" width={40} height={40} />
             </button>
           </div>
         </form>
