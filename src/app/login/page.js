@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const page = () => {
   return (
-    <div className="flex mt-48">
+    <div className="flex transform origin-center translate-y-1/2">
       <section className="flex flex-col overflow-hidden self-center px-12 py-9 mx-auto max-w-full rounded-2xl border border-solid bg-blue-600 bg-opacity-30 w-[640px] max-md:px-5 ">
         <h1 className="h3 text-center">로그인</h1>
         <form>
