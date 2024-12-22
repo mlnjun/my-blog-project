@@ -15,7 +15,13 @@ const page = () => {
         </div>
 
         {/* 블로그 본문 */}
-        <div></div>
+        <div>
+          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />{" "}
+          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />{" "}
+          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />{" "}
+          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />{" "}
+          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+        </div>
       </div>
       {/* 사이드바 */}
       <Sidebar />
