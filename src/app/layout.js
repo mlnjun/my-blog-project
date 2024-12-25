@@ -2,6 +2,14 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
+import { initDatabase } from "@/lib/initDb";
+
+// 앱 시작 시 한 번만 실행
+if (process.env.ALLOW_SYNC === "true") {
+  initDatabase()
+    .then(() => console.log("Database initialized"))
+    .catch(console.error);
+}
 
 const geistSans = localFont({
   src: "../fonts/NotoSansKR-Regular.ttf",
@@ -30,7 +38,7 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} antialiased`}>
         <Header />
 
-        <div>{children}</div>
+        <div className="pt-[57px]">{children}</div>
       </body>
     </html>
   );

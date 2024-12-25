@@ -2,7 +2,7 @@ import Sidebar from "@/components/Sidebar";
 
 const page = () => {
   return (
-    <div className="flex justify-center pt-20 ">
+    <div className="flex justify-center pt-[57px]">
       <div className="flex flex-col max-w-[1080px] mr-4">
         {/* 콘텐츠 헤더 */}
         <div className="flex flex-col gap-1 my-5">

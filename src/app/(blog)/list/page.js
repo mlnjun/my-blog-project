@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const page = () => {
   return (
-    <div className="flex my-6">
+    <div className="flex pt-10">
       <div className="flex flex-col mx-auto max-w-[1198px]">
         <div className="flex flex-wrap items-start justify-between px-4 py-2 w-[1080] h-auto bg-primary bg-opacity-25 rounded-lg">
           <div>
