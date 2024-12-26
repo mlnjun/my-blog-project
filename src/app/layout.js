@@ -5,6 +5,7 @@ import Sidebar from "@/components/Sidebar";
 import { initDatabase } from "@/lib/initDb";
 
 // 앱 시작 시 한 번만 실행
+// DB 연결
 if (process.env.ALLOW_SYNC === "true") {
   initDatabase()
     .then(() => console.log("Database initialized"))

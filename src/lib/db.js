@@ -17,19 +17,4 @@ const sequelize = new Sequelize({
   logging: process.env.NODE_ENV === "development" ? console.log : false,
 });
 
-// DB 연결 확인
-export async function checkConnection() {
-  if (process.env.NODE_ENV === "production") {
-    try {
-      await sequelize.authenticate();
-      console.log("프로덕션 DB 연결 성공");
-    } catch (error) {
-      console.error("DB 연결 실패:", error);
-      throw error;
-    }
-  } else {
-    console.log("개발 환경: DB 연결 확인 생략");
-  }
-}
-
 export default sequelize;
