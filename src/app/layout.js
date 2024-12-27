@@ -2,15 +2,15 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-import { initDatabase } from "@/lib/initDb";
+// import { initDatabase } from "@/lib/initDb";
 
-// 앱 시작 시 한 번만 실행
-// DB 연결
-if (process.env.ALLOW_SYNC === "true") {
-  initDatabase()
-    .then(() => console.log("Database initialized"))
-    .catch(console.error);
-}
+// // 앱 시작 시 한 번만 실행
+// // DB 연결
+// if (process.env.ALLOW_SYNC === "true") {
+//   initDatabase()
+//     .then(() => console.log("Database initialized"))
+//     .catch(console.error);
+// }
 
 const geistSans = localFont({
   src: "../fonts/NotoSansKR-Regular.ttf",

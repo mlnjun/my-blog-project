@@ -1,7 +1,7 @@
-import sequelize from "@/lib/db";
-import defineUser from "./User";
-import defineBlogCategory from "./BlogCategory";
-import defineBlogs from "./Blogs";
+import sequelize from "../lib/db.js";
+import defineUser from "./User.js";
+import defineBlogCategory from "./BlogCategory.js";
+import defineBlogs from "./Blogs.js";
 
 // 모델 정의
 const User = defineUser(sequelize);

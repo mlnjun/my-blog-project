@@ -1,5 +1,14 @@
 import { NextResponse } from "next/server";
-import User from "@/models/User";
+import User from "../../../../models/User";
+
+export async function GET(request) {
+  try {
+    const user = await User.findAll();
+    return NextResponse.json({ user });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
 
 export async function POST(request) {
   if (process.env.NODE_ENV !== "production") {
