@@ -5,10 +5,10 @@ import jwt from "jsonwebtoken";
 
 export async function POST(request) {
   const result = await request.json();
-  const { id, password } = result;
+  const { userId, password } = result;
 
   // 입력 값 체크
-  if (!id) {
+  if (!userId) {
     return NextResponse.json(
       { error: "아이디를 입력해야 합니다." },
       { status: 400 }
@@ -21,7 +21,7 @@ export async function POST(request) {
   }
 
   // 아이디 확인
-  const user = await User.findOne({ id });
+  const user = await User.findOne({ userId });
   if (!user) {
     return NextResponse.json(
       { error: "아이디가 존재하지 않습니다." },
@@ -39,11 +39,15 @@ export async function POST(request) {
   }
 
   // JWT 토큰 생성
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, {
     expiresIn: "12h",
   });
 
   // 자동 로그인 기능 구현 예정
 
-  return NextResponse.json({ token }, { status: 200 });
+  return NextResponse.json(
+    { token },
+    { message: "로그인 성공" },
+    { status: 200 }
+  );
 }
