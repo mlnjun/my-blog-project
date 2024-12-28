@@ -9,7 +9,7 @@ export default function defineUser(sequelize) {
         autoIncrement: true,
         primaryKey: true,
       },
-      username: {
+      userId: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
@@ -31,6 +31,17 @@ export default function defineUser(sequelize) {
     {
       tableName: "users",
       timestamps: true,
+
+      indexes: [
+        {
+          unique: true,
+          fields: ["name"],
+        },
+        {
+          unique: true,
+          fields: ["userId"],
+        },
+      ],
     }
   );
 

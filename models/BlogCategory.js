@@ -16,8 +16,14 @@ export default function defineBlogCategory(sequelize) {
     },
     {
       tableName: "blog_categories",
-      timestamps: false,
+      timestamps: true,
       paranoid: false,
+      indexes: [
+        {
+          unique: true,
+          fields: ["name"],
+        },
+      ],
     }
   );
 
