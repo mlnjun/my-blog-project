@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { User } from "../../../../../models";
 import bcrypt from "bcrypt";
+import { where } from "sequelize";
 
 export async function POST(request) {
   try {
@@ -32,7 +33,7 @@ export async function POST(request) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // 아이디 중복 체크
-    const existingUser = await User.findOne({ userId });
+    const existingUser = await User.findOne({ where: { userId: userId } });
     if (existingUser) {
       return NextResponse.json(
         { error: "이미 사용 중인 아이디입니다." },
