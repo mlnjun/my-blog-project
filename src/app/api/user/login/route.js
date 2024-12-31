@@ -10,21 +10,21 @@ export async function POST(request) {
   // 입력 값 체크
   if (!userId) {
     return NextResponse.json(
-      { error: "아이디를 입력해야 합니다." },
+      { message: "아이디를 입력해야 합니다." },
       { status: 400 }
     );
   } else if (!password) {
     return NextResponse.json(
-      { error: "비밀번호를 입력해야 합니다." },
+      { message: "비밀번호를 입력해야 합니다." },
       { status: 400 }
     );
   }
 
   // 아이디 확인
-  const user = await User.findOne({ userId });
+  const user = await User.findOne({ where: { userId } });
   if (!user) {
     return NextResponse.json(
-      { error: "아이디가 존재하지 않습니다." },
+      { message: "아이디가 존재하지 않습니다." },
       { status: 400 }
     );
   }
@@ -33,21 +33,35 @@ export async function POST(request) {
   const comparePassword = await bcrypt.compare(password, user.password);
   if (!comparePassword) {
     return NextResponse.json(
-      { error: "비밀번호가 일치하지 않습니다." },
+      { message: "비밀번호가 일치하지 않습니다." },
       { status: 400 }
     );
   }
 
   // JWT 토큰 생성
-  const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, {
-    expiresIn: "12h",
-  });
+  const token = await jwt.sign(
+    { userId: user.userId },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "12h",
+    }
+  );
 
-  // 자동 로그인 기능 구현 예정
-
-  return NextResponse.json(
-    { token },
-    { message: "로그인 성공" },
+  // 응답 객체 생성
+  const response = NextResponse.json(
+    { message: "로그인 성공", token },
     { status: 200 }
   );
+
+  // 쿠키 설정
+  response.cookies.set({
+    name: "token",
+    value: token,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 12, // 12시간
+  });
+
+  return response;
 }

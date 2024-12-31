@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import validationRules from "@/constants/validation";
 
 const Page = () => {
   const router = useRouter();
@@ -32,22 +33,37 @@ const Page = () => {
       alert("이름을 입력해주세요.");
       return;
     }
+
+    // 아이디 유효성 검사
     if (formData.userId === "") {
       alert("아이디를 입력해주세요.");
       return;
     }
-    if (formData.userId.length < 4) {
-      alert("아이디는 4자 이상이어야 합니다.");
+    if (formData.userId.length < validationRules.id.minLength) {
+      alert(`아이디는 ${validationRules.id.minLength}자 이상이어야 합니다.`);
       return;
     }
+    if (!validationRules.id.pattern.test(formData.userId)) {
+      alert("아이디는 영문자와 숫자만 사용 가능합니다.");
+      return;
+    }
+
+    // 비밀번호 유효성 검사
     if (formData.password === "") {
       alert("비밀번호를 입력해주세요.");
       return;
     }
-    if (formData.password.length < 8) {
-      alert("비밀번호는 8자 이상이어야 합니다.");
+    if (formData.password.length < validationRules.password.minLength) {
+      alert(
+        `비밀번호는 ${validationRules.password.minLength}자 이상이어야 합니다.`
+      );
       return;
     }
+    if (!validationRules.password.pattern.test(formData.password)) {
+      alert("비밀번호는 영문자와 숫자를 모두 포함해야 합니다.");
+      return;
+    }
+
     if (passwordCheck === "") {
       alert("비밀번호 재확인을 입력해주세요.");
       return;
