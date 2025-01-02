@@ -1,11 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { login } from "@/store/userSlice";
 import axios from "axios";
 import validationRules from "@/constants/validation";
 
 const Page = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -81,11 +84,7 @@ const Page = () => {
         userId: formData.userId,
       })
       .then((res) => {
-        // 아이디가 존재하지 않으면 회원가입 진행
-        console.log(res.data);
-
         if (!res.data.exist) {
-          console.log(res.data);
           // 회원가입 요청
           axios
             .post("http://localhost:3000/api/user/sign-up", {
@@ -94,6 +93,11 @@ const Page = () => {
               password: formData.password,
             })
             .then((res) => {
+              // Redux store에 사용자 정보 저장
+              dispatch(login({
+                userId: formData.userId,
+                name: formData.name
+              }));
               alert("회원가입이 완료되었습니다.");
               router.push("/");
             })
@@ -105,7 +109,6 @@ const Page = () => {
               );
             });
         } else {
-          console.log(res.data);
           alert("이미 존재하는 아이디입니다.");
         }
       })

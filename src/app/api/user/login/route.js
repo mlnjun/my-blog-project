@@ -3,6 +3,7 @@ import { User } from "../../../../../models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// 로그인 요청 처리
 export async function POST(request) {
   const result = await request.json();
   const { userId, password } = result;
@@ -24,7 +25,7 @@ export async function POST(request) {
   const user = await User.findOne({ where: { userId } });
   if (!user) {
     return NextResponse.json(
-      { message: "아이디가 존재하지 않습니다." },
+      { message: "아이디 또는 비밀번호를 확인해주세요." },
       { status: 400 }
     );
   }
@@ -33,7 +34,7 @@ export async function POST(request) {
   const comparePassword = await bcrypt.compare(password, user.password);
   if (!comparePassword) {
     return NextResponse.json(
-      { message: "비밀번호가 일치하지 않습니다." },
+      { message: "아이디 또는 비밀번호를 확인해주세요." },
       { status: 400 }
     );
   }
