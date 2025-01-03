@@ -1,5 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./features/counterSlice";
+import authReducer from "./features/auth/authSlice";
+
 
 // configureStore 함수를 사용하여 스토어를 생성합니다.
 export const store = configureStore({
@@ -7,6 +9,7 @@ export const store = configureStore({
   reducer: {
     // counter 슬라이스의 리듀서를 'counter' 키로 등록합니다.
     counter: counterReducer,
+    auth: authReducer,
   },
   // // 미들웨어를 설정합니다.
   // middleware: (getDefaultMiddleware) =>
@@ -27,5 +30,5 @@ export const store = configureStore({
     // counter: { value: 10 },
   },
   // 스토어 향상자를 설정합니다. (고급 설정)
-  enhancers: [],
+  // enhancers: [],
 });

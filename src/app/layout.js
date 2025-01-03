@@ -1,21 +1,15 @@
-import localFont from "next/font/local";
+import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-// import { initDatabase } from "@/lib/initDb";
 
-// // 앱 시작 시 한 번만 실행
-// // DB 연결
-// if (process.env.ALLOW_SYNC === "true") {
-//   initDatabase()
-//     .then(() => console.log("Database initialized"))
-//     .catch(console.error);
-// }
+// Redux
+import Providers from "@/components/Providers";
 
-const geistSans = localFont({
-  src: "../fonts/NotoSansKR-Regular.ttf",
-  variable: "--font-geist-sans",
-  weight: "400 600",
+const notoSansKr = Noto_Sans_KR({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-noto-sans-kr",
 });
 
 export const metadata = {
@@ -25,21 +19,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={`${geistSans.variable} antialiased`}>
-        <Header />
-
-        <div className="pt-[57px]">{children}</div>
+    <html lang="ko" suppressHydrationWarning>
+      <body
+        className={`${notoSansKr.variable} antialiased`}
+        suppressHydrationWarning
+      >
+        <Providers>
+          <Header />
+          <div className="pt-[57px]">{children}</div>
+        </Providers>
       </body>
     </html>
   );
