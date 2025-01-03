@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const Header = () => {
   return (
@@ -7,6 +8,8 @@ const Header = () => {
         <div className="h5">
           <Link href="/">Blog</Link>
         </div>
+
+        {/* 비로그인 상태 */}
         <div>
           {/* 추후 로그인, 비로그인 상태 구분 예정 */}
           <Link href="/login" className="font-semibold">
@@ -16,6 +19,18 @@ const Header = () => {
           <Link href="/signUp" className="font-semibold">
             회원가입
           </Link>
+        </div>
+        {/* 로그인 상태 */}
+        <div>
+          <div className="flex items-center">
+            <div>닉네임</div>
+            <Image
+              src="/icon/arrow_drop_down.svg"
+              alt="arrow-down"
+              width={25}
+              height={25}
+            />
+          </div>
         </div>
       </div>
     </header>
