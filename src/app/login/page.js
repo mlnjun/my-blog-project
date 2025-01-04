@@ -4,9 +4,12 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "@/store/features/auth/authSlice";
 
 const Page = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [loginInfo, setLoginInfo] = useState({
     userId: "",
@@ -40,6 +43,8 @@ const Page = () => {
       const res = await axios.post("/api/user/login", loginInfo);
 
       // 로그인 성공 (status: 200)
+      dispatch(login(res.data.name));
+
       router.push("/");
     } catch (error) {
       // 서버에서 전달한 에러 메시지 처리

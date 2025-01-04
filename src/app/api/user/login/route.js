@@ -50,7 +50,7 @@ export async function POST(request) {
 
   // 응답 객체 생성
   const response = NextResponse.json(
-    { message: "로그인 성공", token },
+    { message: "로그인 성공", token, name: user.name },
     { status: 200 }
   );
 
