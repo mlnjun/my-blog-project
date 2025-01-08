@@ -55,9 +55,6 @@ export default function defineUser(sequelize) {
         {
           fields: ["refreshToken"], // 토큰 검색 성능 향상
         },
-        {
-          fields: ["status"], // 상태 검색 성능 향상
-        },
       ],
     }
   );
