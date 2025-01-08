@@ -5,9 +5,11 @@ import jwt from "jsonwebtoken";
 
 // 로그인 요청 처리
 export async function POST(request) {
+  // 로그인 요청 받기
   const result = await request.json();
   const { userId, password } = result;
 
+  // 유효성 검사
   // 입력 값 체크
   if (!userId) {
     return NextResponse.json(
@@ -39,29 +41,65 @@ export async function POST(request) {
     );
   }
 
-  // JWT 토큰 생성
-  const token = await jwt.sign(
-    { userId: user.userId },
+  // 로그인 성공
+  // access 토큰 생성
+  const accessToken = await jwt.sign(
+    {
+      userId: user.userId,
+      name: user.name,
+      iat: Date.now(),
+    },
     process.env.JWT_SECRET,
     {
-      expiresIn: "12h",
+      expiresIn: "15m",
     }
   );
 
-  // 응답 객체 생성
+  // refresh 토큰 생성
+  const refreshToken = await jwt.sign(
+    {
+      userId: user.userId,
+      name: user.name,
+      iat: Date.now(),
+    },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: "30d" }
+  );
+
+  // Refresh Token을 DB에 저장
+  await User.update(
+    {
+      refreshToken,
+      tokenExpiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30일
+    },
+    {
+      where: { userId: user.userId },
+    }
+  );
+
+  // 응답 생성
   const response = NextResponse.json(
-    { message: "로그인 성공", token, name: user.name },
+    { message: "로그인 성공", accessToken, name: user.name },
     { status: 200 }
   );
 
   // 쿠키 설정
   response.cookies.set({
-    name: "token",
-    value: token,
+    name: "accessToken",
+    value: accessToken,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 12, // 12시간
+    maxAge: 60 * 15, // 15분
+  });
+
+  response.cookies.set({
+    name: "refreshToken",
+    value: refreshToken,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 30, // 30일
   });
 
   return response;
