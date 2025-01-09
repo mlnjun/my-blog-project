@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { login } from "@/store/userSlice";
 import axios from "axios";
 import validationRules from "@/constants/validation";
 
@@ -93,13 +92,8 @@ const Page = () => {
               password: formData.password,
             })
             .then((res) => {
-              // Redux store에 사용자 정보 저장
-              dispatch(login({
-                userId: formData.userId,
-                name: formData.name
-              }));
               alert("회원가입이 완료되었습니다.");
-              router.push("/");
+              router.push("/login");
             })
             .catch((err) => {
               console.log("에러 응답:", err.response.data);

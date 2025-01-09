@@ -1,19 +1,25 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { User } from "../../../../../models";
-import jwt from "jsonwebtoken";
+import { store } from "../../../../store/store";
+import { logout } from "../../../../store/features/auth/authSlice";
 
-export async function POST(request) {
-  const req = await request.json();
-  const { token } = req.token;
+export async function POST() {
+  try {
+    // 쿠키에서 토큰 삭제
+    cookies().delete("accessToken");
+    cookies().delete("refreshToken");
 
-  // 토큰 검증
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  if (!decoded) {
-    return NextResponse.json({ message: "유효하지 않은 토큰입니다." }, { status: 400 });
+    // Redux 상태 업데이트
+    store.dispatch(logout());
+
+    return NextResponse.json(
+      { message: "로그아웃 되었습니다." },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "로그아웃 처리 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
   }
-
-  // 토큰 삭제
-  await User.update({ token: null }, { where: { userId: decoded.userId } });
-
-  return NextResponse.json({ message: "로그아웃 되었습니다." }, { status: 200 });
 }

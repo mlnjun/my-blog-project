@@ -7,8 +7,8 @@ import { useState, useEffect, useRef } from "react";
 
 const Header = () => {
   // Redux store에서 로그인 상태와 사용자 이름 가져오기
-  const isLogin = useSelector((state) => state.auth.isLogin);
-  const userName = useSelector((state) => state.auth.userName);
+  const isLogin = useSelector((state) => state.auth.isAuthenticated);
+  const userName = useSelector((state) => state.auth.name);
 
   // 드롭다운 메뉴의 열림/닫힘 상태 관리
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -95,7 +95,7 @@ const Header = () => {
               로그인
             </Link>
             &nbsp;/&nbsp;
-            <Link href="/signUp" className="font-semibold">
+            <Link href="/sign-up" className="font-semibold">
               회원가입
             </Link>
           </div>
