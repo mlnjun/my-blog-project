@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef } from "react";
+import { logout } from "@/store/features/auth/authSlice";
+import axios from "axios";
 
 const Header = () => {
   // Redux store에서 로그인 상태와 사용자 이름 가져오기
   const isLogin = useSelector((state) => state.auth.isAuthenticated);
   const userName = useSelector((state) => state.auth.name);
+  const dispatch = useDispatch();
 
   // 드롭다운 메뉴의 열림/닫힘 상태 관리
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -33,6 +36,26 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleLogout = async (e) => {
+    try {
+      const response = await axios.post("/api/user/logout");
+
+      if (response.status === 200) {
+        // 로그아웃 성공
+        dispatch(logout());
+      }
+
+      if (response.status === 500 || response.status === 401) {
+        // 로그아웃 실패
+        alert("로그아웃 실패");
+      }
+
+      console.log(response);
+    } catch (error) {
+      console.error("로그아웃 오류:", error);
+    }
+  };
 
   return (
     <header className="flex absolute flex-col justify-center items-center px-16 py-3.5 w-full border-[0.1px] bg-[#BDD0F9] max-md:px-5 max-md:max-w-full">
@@ -79,9 +102,7 @@ const Header = () => {
                 </Link>
                 <button
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-md"
-                  onClick={() => {
-                    // 로그아웃 로직 구현 예정
-                  }}
+                  onClick={handleLogout}
                 >
                   로그아웃
                 </button>

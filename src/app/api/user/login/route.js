@@ -47,7 +47,7 @@ export async function POST(request) {
     {
       userId: user.userId,
       name: user.name,
-      iat: Date.now(),
+      // 발급시간, 만료시간 expiresIn에서 자동으로 해줌
     },
     process.env.JWT_SECRET,
     {
@@ -60,7 +60,7 @@ export async function POST(request) {
     {
       userId: user.userId,
       name: user.name,
-      iat: Date.now(),
+      // 발급시간, 만료시간 expiresIn에서 자동으로 해줌
     },
     process.env.JWT_REFRESH_SECRET,
     { expiresIn: "30d" }
