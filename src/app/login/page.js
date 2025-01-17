@@ -14,6 +14,7 @@ const Page = () => {
   const [loginInfo, setLoginInfo] = useState({
     userId: "",
     password: "",
+    autoLogin: false,
   });
 
   const handleChange = (e) => {
@@ -62,7 +63,7 @@ const Page = () => {
     <div className="flex transform origin-center translate-y-1/2">
       <section className="flex flex-col overflow-hidden self-center px-12 py-9 mx-auto max-w-full rounded-2xl border border-solid bg-blue-600 bg-opacity-30 w-[640px] max-md:px-5 ">
         <h1 className="h3 text-center">로그인</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="flex overflow-hidden flex-col mt-5 w-full text-base text-black whitespace-nowrap max-md:max-w-full">
             <label htmlFor="id">ID</label>
             <input
@@ -101,6 +102,10 @@ const Page = () => {
             </button>
           </div>
         </form>
+        <div className="flex gap-2 mt-2">
+          <input type="checkbox" id="autoLogin" name="autoLogin" value={loginInfo.autoLogin} onChange={handleChange} />
+          <label htmlFor="autoLogin">자동 로그인</label>
+        </div>
         <button
           className="h5 text-n-1 w-full h-[45px] mt-5 bg-primary rounded-md hover:bg-[#005dc0]"
           onClick={handleSubmit}

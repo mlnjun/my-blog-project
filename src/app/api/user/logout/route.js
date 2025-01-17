@@ -28,8 +28,10 @@ export async function POST(request) {
       { message: "로그아웃 되었습니다." },
       { status: 200 }
     );
+
   } catch (error) {
-    console.error("로그아웃 오류:", error); // 에러 로깅 추가
+    // 에러 로깅
+    console.error("로그아웃 오류:", error);
     return NextResponse.json(
       { error: "로그아웃 처리 중 오류가 발생했습니다." },
       { status: 500 }

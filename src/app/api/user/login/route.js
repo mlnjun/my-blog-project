@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 export async function POST(request) {
   // 로그인 요청 받기
   const result = await request.json();
-  const { userId, password } = result;
+  const { userId, password, autoLogin } = result;
 
   // 유효성 검사
   // 입력 값 체크
@@ -63,14 +63,14 @@ export async function POST(request) {
       // 발급시간, 만료시간 expiresIn에서 자동으로 해줌
     },
     process.env.JWT_REFRESH_SECRET,
-    { expiresIn: "30d" }
+    { expiresIn : autoLogin ? "30d" : "12h" }
   );
 
   // Refresh Token을 DB에 저장
   await User.update(
     {
       refreshToken,
-      tokenExpiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30일
+      tokenExpiry: new Date(Date.now() + (autoLogin ? 30 * 24 * 60 * 60 * 1000 : 12 * 60 * 60 * 1000)), // 자동 > 30일, 수동 > 12시간
     },
     {
       where: { userId: user.userId },
@@ -99,7 +99,7 @@ export async function POST(request) {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 30, // 30일
+    maxAge: autoLogin ? 60 * 60 * 24 * 30 : 60 * 60 * 12, // 30일
   });
 
   return response;
