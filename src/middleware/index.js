@@ -14,7 +14,7 @@ const AUTH_REQUIRED_APIS = [
 const PROTECTED_ROUTES = ["/write", "/mypage"];
 
 // 로그인된 상태에서 접근 불가능한 경로
-const AUTH_RESTRICTED_ROUTES = ["/login", "/sign-up"];
+const AUTH_RESTRICTED_ROUTES = ["/api/user/login", "/api/user/sign-up", "/api/user/auth/validate"];
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
@@ -25,6 +25,7 @@ export async function middleware(request) {
     // 인증이 필요한 API인지 확인
     // some : 배열의 요소 중 하나라도 조건을 만족하면 true를 반환
     // some((api) => ) : api는 배열의 요소를 하나씩 순회하면서 조건을 만족하는지 확인
+    // startsWith : 문자열이 특정 문자열로 시작하는지 확인
     const needsAuth = AUTH_REQUIRED_APIS.some((api) =>
       pathname.startsWith(api)
     );

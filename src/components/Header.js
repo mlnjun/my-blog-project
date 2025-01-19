@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef } from "react";
-import { logout } from "@/store/features/auth/authSlice";
+import { logout, login } from "@/store/features/auth/authSlice";
 import axios from "axios";
 
 const Header = () => {
@@ -12,6 +12,32 @@ const Header = () => {
   const isLogin = useSelector((state) => state.auth.isAuthenticated);
   const userName = useSelector((state) => state.auth.name);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const validateAuth = async () => {
+      try {
+        // 토큰 검증 요청
+        const response = await axios.get('/api/user/auth/validate');
+        
+        // 토큰은 유효한데 Redux가 로그아웃 상태인 경우
+        if (response.status === 200 && !isLogin) {
+          // 응답에서 사용자 이름을 가져와서 Redux 상태 업데이트
+          dispatch(login(response.data.name));
+        }
+        // 토큰이 유효하지 않은데 Redux가 로그인 상태인 경우
+        else if (response.status !== 200 && isLogin) {
+          dispatch(logout());
+        }
+      } catch (error) {
+        // 토큰 검증 실패면서 Redux가 로그인 상태인 경우
+        if (isLogin) {
+          dispatch(logout());
+        }
+      }
+    };
+
+    validateAuth();
+  }, [isLogin, dispatch]);
 
   // 드롭다운 메뉴의 열림/닫힘 상태 관리
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
