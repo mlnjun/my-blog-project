@@ -43,18 +43,16 @@ const Page = () => {
     try {
       const res = await axios.post("/api/user/login", loginInfo);
 
-      // 로그인 성공 (status: 200)
-      dispatch(login(res.data.name));
-
-      router.push("/");
+      if (res.status === 200) {
+        // name만 전달하도록 수정
+        dispatch(login(res.data.user.name));
+        router.push("/");
+      }
     } catch (error) {
-      // 서버에서 전달한 에러 메시지 처리
       if (error.response) {
-        // 서버가 응답을 반환한 경우 (status: 400)
         alert(error.response.data.message);
       } else {
-        // 서버에 요청이 도달하지 못한 경우
-        alert("로그인 중 오류가 발생했습니다.\n" + error.message);
+        alert("로그인 중 오류가 발생했습니다.");
       }
     }
   };
@@ -103,7 +101,13 @@ const Page = () => {
           </div>
         </form>
         <div className="flex gap-2 mt-2">
-          <input type="checkbox" id="autoLogin" name="autoLogin" value={loginInfo.autoLogin} onChange={handleChange} />
+          <input
+            type="checkbox"
+            id="autoLogin"
+            name="autoLogin"
+            value={loginInfo.autoLogin}
+            onChange={handleChange}
+          />
           <label htmlFor="autoLogin">자동 로그인</label>
         </div>
         <button

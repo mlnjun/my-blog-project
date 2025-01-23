@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { User } from "../../../../../models";
+import { User, sequelize } from "../../../../../models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 // 로그인 요청 처리
 export async function POST(request) {
   // 로그인 요청 받기
-  const result = await request.json();
-  const { userId, password, autoLogin } = result;
+  const req = await request.json();
+  const { userId, password, autoLogin } = req;
 
   // 유효성 검사
   // 입력 값 체크
@@ -41,65 +41,56 @@ export async function POST(request) {
     );
   }
 
-  // 로그인 성공
-  // access 토큰 생성
-  const accessToken = await jwt.sign(
-    {
-      userId: user.userId,
-      name: user.name,
-      // 발급시간, 만료시간 expiresIn에서 자동으로 해줌
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "15m",
-    }
-  );
+  // 트랜잭션 > 토큰 버전 증가 > 토큰 생성 > 응답 생성 > 쿠키 설정
+  // 트랜잭션이란 데이터베이스 작업을 하나의 단위로 묶어서 처리하는 것
+  // 모든 명령을 일괄적으로 처리하거나 모두 처리하지 않는 것을 보장하는 것
+  // 파라미터로 데이터를 모아두고 예외가 발생하면 모든 작업을 취소하는 원리
+  // 2. 트랜잭션 시작
+  const result = await sequelize.transaction(async (t) => {
+    // 2-1. tokenVersion 증가 (선택적)
+    await user.increment("tokenVersion", { transaction: t });
+    // 2-2. 최신 사용자 정보 다시 조회
+    const updatedUser = await User.findOne({
+      where: { userId },
+      transaction: t,
+    });
 
-  // refresh 토큰 생성
-  const refreshToken = await jwt.sign(
-    {
-      userId: user.userId,
-      name: user.name,
-      // 발급시간, 만료시간 expiresIn에서 자동으로 해줌
-    },
-    process.env.JWT_REFRESH_SECRET,
-    { expiresIn : autoLogin ? "30d" : "12h" }
-  );
+    // 2-3. 토큰 생성
+    const authToken = jwt.sign(
+      {
+        userId: updatedUser.userId,
+        name: updatedUser.name,
+        tokenVersion: !updatedUser.tokenVersion ? 1 : updatedUser.tokenVersion,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: autoLogin ? "90d" : "12h" }
+    );
 
-  // Refresh Token을 DB에 저장
-  await User.update(
-    {
-      refreshToken,
-      tokenExpiry: new Date(Date.now() + (autoLogin ? 30 * 24 * 60 * 60 * 1000 : 12 * 60 * 60 * 1000)), // 자동 > 30일, 수동 > 12시간
-    },
-    {
-      where: { userId: user.userId },
-    }
-  );
+    return { authToken, user: updatedUser };
+  });
 
-  // 응답 생성
+  // 3. 응답 생성
   const response = NextResponse.json(
-    { message: "로그인 성공", accessToken, name: user.name },
+    {
+      message: "로그인 성공",
+      user: {
+        name: result.user.name,
+      },
+    },
     { status: 200 }
   );
 
-  // 쿠키 설정
-  response.cookies.set({
-    name: "accessToken",
-    value: accessToken,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 15, // 15분
-  });
+  // 응답 데이터 확인
+  console.log("Login API Response:", response.data);
 
+  // 4. 쿠키 설정
   response.cookies.set({
-    name: "refreshToken",
-    value: refreshToken,
+    name: "authToken",
+    value: result.authToken,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: autoLogin ? 60 * 60 * 24 * 30 : 60 * 60 * 12, // 30일
+    maxAge: autoLogin ? 60 * 60 * 24 * 30 : 60 * 60 * 24,
   });
 
   return response;

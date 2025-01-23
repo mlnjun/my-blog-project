@@ -32,17 +32,12 @@ export default function defineUser(sequelize) {
         defaultValue: false,
         comment: "관리자 여부",
       },
-      refreshToken: {
-        type: DataTypes.STRING(512),
-        allowNull: true,
-        comment: "Refresh 토큰",
+      tokenVersion: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        comment: "토큰 버전",
       },
-      tokenExpiry: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        comment: "Refresh 토큰 만료일",
-      },
-
     },
     {
       tableName: "users",
@@ -53,7 +48,7 @@ export default function defineUser(sequelize) {
           fields: ["userId"],
         },
         {
-          fields: ["refreshToken"], // 토큰 검색 성능 향상
+          fields: ["tokenVersion"], // 토큰 검색 성능 향상
         },
       ],
     }

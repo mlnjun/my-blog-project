@@ -6,38 +6,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { logout, login } from "@/store/features/auth/authSlice";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   // Redux store에서 로그인 상태와 사용자 이름 가져오기
   const isLogin = useSelector((state) => state.auth.isAuthenticated);
   const userName = useSelector((state) => state.auth.name);
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  useEffect(() => {
-    const validateAuth = async () => {
-      try {
-        // 토큰 검증 요청
-        const response = await axios.get('/api/user/auth/validate');
-        
-        // 토큰은 유효한데 Redux가 로그아웃 상태인 경우
-        if (response.status === 200 && !isLogin) {
-          // 응답에서 사용자 이름을 가져와서 Redux 상태 업데이트
-          dispatch(login(response.data.name));
-        }
-        // 토큰이 유효하지 않은데 Redux가 로그인 상태인 경우
-        else if (response.status !== 200 && isLogin) {
-          dispatch(logout());
-        }
-      } catch (error) {
-        // 토큰 검증 실패면서 Redux가 로그인 상태인 경우
-        if (isLogin) {
-          dispatch(logout());
-        }
-      }
-    };
-
-    validateAuth();
-  }, [isLogin, dispatch]);
+  console.log("userName type:", typeof userName);
+  console.log("userName value:", userName);
 
   // 드롭다운 메뉴의 열림/닫힘 상태 관리
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -63,23 +42,30 @@ const Header = () => {
     };
   }, []);
 
-  const handleLogout = async (e) => {
+  const handleLogout = async () => {
     try {
       const response = await axios.post("/api/user/logout");
-
       if (response.status === 200) {
-        // 로그아웃 성공
         dispatch(logout());
-      }
 
-      if (response.status === 500 || response.status === 401) {
-        // 로그아웃 실패
-        alert("로그아웃 실패");
+        router.refresh();
+        alert("로그아웃 되었습니다.");
       }
-
-      console.log(response);
     } catch (error) {
+      // 액시오스에서는 2xx에서 코드가 벗어나면 자동으로 오류 처리
       console.error("로그아웃 오류:", error);
+
+      if (error.response) {
+        // HTTP 에러 응답이 있는 경우
+        if (error.response.status === 401) {
+          alert("로그인이 필요합니다");
+          dispatch(logout()); // 인증 만료 시 로그아웃
+        } else {
+          alert("로그아웃 처리 중 오류가 발생했습니다.");
+        }
+      } else {
+        alert("서버 연결 오류가 발생했습니다.");
+      }
     }
   };
 

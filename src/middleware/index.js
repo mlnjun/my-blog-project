@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { store } from "../store/store";
 import { logout } from "../store/features/auth/authSlice";
-import { accessTokenAuthMiddleware } from "./auth/accessTokenAuthMiddleware";
+import { accessTokenAuthMiddleware } from "./auth/tokenAuthMiddleware";
 
 // 인증이 필요한 API 경로 목록
 const AUTH_REQUIRED_APIS = [
@@ -14,7 +14,10 @@ const AUTH_REQUIRED_APIS = [
 const PROTECTED_ROUTES = ["/write", "/mypage"];
 
 // 로그인된 상태에서 접근 불가능한 경로
-const AUTH_RESTRICTED_ROUTES = ["/api/user/login", "/api/user/sign-up", "/api/user/auth/validate"];
+const AUTH_RESTRICTED_ROUTES = [
+  "/api/user/login",
+  "/api/user/sign-up",
+];
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;

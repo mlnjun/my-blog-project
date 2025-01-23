@@ -22,5 +22,5 @@ Object.values(models).forEach((model) => {
   }
 });
 
-export { User, BlogCategory, Blogs };
+export { User, BlogCategory, Blogs, sequelize };
 export default models;
