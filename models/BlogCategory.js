@@ -21,7 +21,7 @@ export default function defineBlogCategory(sequelize) {
       indexes: [
         {
           unique: true,
-          fields: ["name"],
+          fields: ["id"],
         },
       ],
     }

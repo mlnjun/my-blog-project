@@ -1,4 +1,5 @@
 import Editor from "@/components/Editor";
+import Button from "@/components/Button";
 
 const page = () => {
   return (
@@ -19,12 +20,15 @@ const page = () => {
             placeholder="태그 추가"
           />
 
-          <select
-            type="text"
-            className="my-2 p-2 w-[33%] bg-white rounded-lg min-h-[36px] max-md:max-w-full box-border border-[2px] border-n-5 focus:border-primary focus:border-opacity-30 focus:outline-none"
-          >
-            <option>카테고리</option>
-          </select>
+          <div className="my-2 p-2 w-[33%] flex gap-1.5">
+            <select
+              type="text"
+              className="w-full bg-white rounded-lg min-h-[36px] max-md:max-w-full box-border border-[2px] border-n-5 focus:border-primary focus:border-opacity-30 focus:outline-none"
+            >
+              <option>카테고리</option>
+            </select>
+            <Button type="secondary" className="h-[36px]">생성</Button>
+          </div>
         </div>
         <div className="flex gap-1.5 mt-1 mb-2">
           <div className="font-semibold text-white bg-primary bg-opacity-80 p-2 border-[0.25px] rounded-lg">
