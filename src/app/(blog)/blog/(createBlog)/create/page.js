@@ -1,7 +1,13 @@
+'use client'
+
 import Editor from "@/components/Editor";
 import Button from "@/components/Button";
+import BlogCategoryEditor from "@/components/BlogCategoryEditor";
+import { useState } from "react";
 
-const page = () => {
+const Page = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="flex flex-col px-4 mx-auto max-w-[1080px] min-h-[calc(100vh-57px)]">
       <div className="flex flex-col flex-1 gap-2">
@@ -27,7 +33,13 @@ const page = () => {
             >
               <option>카테고리</option>
             </select>
-            <Button type="secondary" className="h-[36px]">생성</Button>
+            <Button 
+              type="secondary" 
+              className="h-[36px]"
+              onClick={() => setIsModalOpen(true)}
+            >
+              생성
+            </Button>
           </div>
         </div>
         <div className="flex gap-1.5 mt-1 mb-2">
@@ -45,8 +57,14 @@ const page = () => {
           <Editor />
         </div>
       </div>
+
+      <BlogCategoryEditor 
+        // props로 모달 열기/닫기 상태 전달
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 };
 
-export default page;
+export default Page;

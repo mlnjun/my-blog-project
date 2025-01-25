@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { BlogCategory } from "@/models";
+import { BlogCategory } from "../../../../../../models";
 import { withAuth } from "@/middleware/hof/withAuth";
 
-export default withAuth(async function POST(request) {
+export const POST = withAuth(async function (request) {
     try {
         const req = await request.json();
         const { name } = req;
@@ -10,6 +10,12 @@ export default withAuth(async function POST(request) {
         // 유효성 검사
         if (!name) {
             return NextResponse.json({ message: "카테고리 이름이 필요합니다." }, { status: 400 });
+        }
+
+        // 카테고리 이름 중복 검사
+        const existingCategory = await BlogCategory.findOne({ name });
+        if (existingCategory) {
+            return NextResponse.json({ message: "이미 존재하는 카테고리 이름입니다." }, { status: 400 });
         }
 
         // 카테고리 생성
