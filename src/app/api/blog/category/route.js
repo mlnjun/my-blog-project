@@ -1,0 +1,1 @@
+import { withAuth } from "@/middleware/hof/withAuth";

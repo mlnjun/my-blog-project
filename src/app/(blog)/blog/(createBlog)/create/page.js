@@ -3,10 +3,22 @@
 import Editor from "@/components/Editor";
 import Button from "@/components/Button";
 import BlogCategoryEditor from "@/components/BlogCategoryEditor";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 카테고리 데이터
+  const [categories, setCategories] = useState([]);
+
+  // 카테고리 데이터 가져오기
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await api.get('/api/categories');
+      setCategories(response.data);
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <div className="flex flex-col px-4 mx-auto max-w-[1080px] min-h-[calc(100vh-57px)]">
