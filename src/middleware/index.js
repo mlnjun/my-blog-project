@@ -6,8 +6,6 @@ import { accessTokenAuthMiddleware } from "./auth/tokenAuthMiddleware";
 // 인증이 필요한 API 경로 목록
 const AUTH_REQUIRED_APIS = [
   "/api/user/logout",
-  "/api/user/profile",
-  "/api/posts/write",
 ];
 
 // 보호된 페이지 경로 목록

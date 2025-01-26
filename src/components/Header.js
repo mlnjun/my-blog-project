@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from "react";
 import { logout, login } from "@/store/features/auth/authSlice";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import api from "@/utils/axios";
 
 const Header = () => {
   // Redux store에서 로그인 상태와 사용자 이름 가져오기
@@ -41,6 +42,32 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    // 토큰 유효성 검사 함수
+    const checkAuth = async () => {
+      try {
+        await api.get('/api/auth/check');
+      } catch (error) {
+        if (error.response?.status === 401) {
+          dispatch(logout());
+          alert("인증이 만료되어 로그아웃 되었습니다.");
+          router.refresh();
+        }
+      }
+    };
+    
+    if (isLogin) {
+      // 최초 실행
+      checkAuth();
+      
+      // 5분마다 토큰 검사
+      const interval = setInterval(checkAuth, 5 * 60 * 1000);
+      
+      // 컴포넌트 언마운트 시 인터벌 정리
+      return () => clearInterval(interval);
+    }
+  }, [dispatch, isLogin, router]);
 
   const handleLogout = async () => {
     try {
