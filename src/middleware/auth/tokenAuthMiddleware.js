@@ -19,35 +19,40 @@ export const tokenAuthMiddleware = async (request) => {
     const storeCookies = cookies();
     // 1. 토큰 확인
     const authToken = storeCookies.get("authToken");
+    
     if (!authToken) {
       return new AuthResult(false, null, "인증이 필요합니다");
     }
+    
+    try {
+      // 2. 토큰 검증 및 디코딩
+      const decoded = jwt.verify(authToken.value, process.env.JWT_SECRET);
 
-    // 2. 토큰 검증 및 디코딩
-    const decoded = jwt.verify(authToken.value, process.env.JWT_SECRET);
+      // 3. 사용자 조회 및 토큰 버전 검증
+      const user = await User.findOne({
+        where: {
+          userId: decoded.userId,
+          tokenVersion: decoded.tokenVersion, // 토큰 버전 일치 확인
+        },
+      });
 
-    // 3. 사용자 조회 및 토큰 버전 검증
-    const user = await User.findOne({
-      where: {
-        userId: decoded.userId,
-        tokenVersion: decoded.tokenVersion, // 토큰 버전 일치 확인
-      },
-    });
+      // 4. 사용자 존재 여부 확인
+      if (!user) {
+        return new AuthResult(false, null, "로그인 정보가 잘못되었습니다.");
+      }
 
-    // 4. 사용자 존재 여부 확인
-    if (!user) {
-      return new AuthResult(false, null, "로그인 정보가 잘못되었습니다.");
+      // 5. 인증 성공
+      return new AuthResult(true, user);
+      
+    } catch (jwtError) {
+      // JWT 검증 실패 (만료 등)
+      if (jwtError instanceof jwt.TokenExpiredError) {
+        return new AuthResult(false, null, "인증이 만료되었습니다");
+      }
+      return new AuthResult(false, null, "유효하지 않은 토큰입니다");
     }
 
-    // 5. 인증 성공
-    return new AuthResult(true, user);
   } catch (error) {
-    // JWT 검증 실패 (만료 등)
-    // jwt.TokenExpiredError 예외 처리
-    if (error instanceof jwt.TokenExpiredError) {
-      return new AuthResult(false, null, "인증이 만료되었습니다");
-    }
-
     // 기타 에러
     console.error("Auth Middleware Error:", error);
     return new AuthResult(false, null, "인증 처리 중 오류가 발생했습니다");

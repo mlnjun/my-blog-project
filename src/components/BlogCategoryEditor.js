@@ -1,6 +1,6 @@
 // 모달 형식으로 띄워 블로그의 카테고리를 생성하는 컴포넌트
 'use client'
-import axios from 'axios';
+import api from '@/utils/axios';
 import { useState } from 'react';
 
 const BlogCategoryEditor = ({ isOpen, onClose }) => {
@@ -16,22 +16,18 @@ const BlogCategoryEditor = ({ isOpen, onClose }) => {
     // 카테고리 생성 함수
     const createCategory = async () => {
         try {
-            const response = await axios.post('/api/blog/category/create', 
-                { name: categoryName },
-                { withCredentials: true }
-            );
-            // 성공 시 처리
+            const response = await api.post('/api/blog/category/create', {
+                name: categoryName
+            });
             setIsCompleted(true);
             setCompletedMessage("카테고리가 생성되었습니다.");
         } catch (error) {
-            // 에러 응답이 있는 경우
-            if (error.response) {
-                if (error.response.status === 400) {
-                    setIsCompleted(false);
-                    setCompletedMessage(error.response.data.message);
-                    setIsError(true);
-                }
-            } else {
+            // 401 토큰 만료는 인터셉터에서 자동 처리됨
+            if (error.response?.status === 400) {
+                setIsCompleted(false);
+                setCompletedMessage(error.response.data.message);
+                setIsError(true);
+            }else {
                 setIsCompleted(false);
                 setCompletedMessage("카테고리 생성에 실패했습니다.");
                 setIsError(true);
