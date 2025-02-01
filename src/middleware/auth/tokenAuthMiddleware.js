@@ -16,7 +16,7 @@ import { User } from "../../../models";
 
 export const tokenAuthMiddleware = async (request) => {
   try {
-    const storeCookies = cookies();
+    const storeCookies = await cookies();
     // 1. 토큰 확인
     const authToken = storeCookies.get("authToken");
     

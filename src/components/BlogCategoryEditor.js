@@ -19,6 +19,7 @@ const BlogCategoryEditor = ({ isOpen, onClose }) => {
             const response = await api.post('/api/blog/category/create', {
                 name: categoryName
             });
+            setIsError(false);
             setIsCompleted(true);
             setCompletedMessage("카테고리가 생성되었습니다.");
         } catch (error) {

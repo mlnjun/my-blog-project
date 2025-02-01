@@ -1,9 +1,10 @@
-'use client'
+"use client";
 
 import Editor from "@/components/Editor";
 import Button from "@/components/Button";
 import BlogCategoryEditor from "@/components/BlogCategoryEditor";
 import { useState, useEffect } from "react";
+import axios from "@/utils/axios";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,9 +15,10 @@ const Page = () => {
   // 카테고리 데이터 가져오기
   useEffect(() => {
     const fetchCategories = async () => {
-      const response = await api.get('/api/categories');
-      setCategories(response.data);
+      const response = await axios.get("/api/blog/category");
+      setCategories(response.data.categories);
     };
+
     fetchCategories();
   }, []);
 
@@ -44,9 +46,14 @@ const Page = () => {
               className="w-full bg-white rounded-lg min-h-[36px] max-md:max-w-full box-border border-[2px] border-n-5 focus:border-primary focus:border-opacity-30 focus:outline-none"
             >
               <option>카테고리</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
             </select>
-            <Button 
-              type="secondary" 
+            <Button
+              type="secondary"
               className="h-[36px]"
               onClick={() => setIsModalOpen(true)}
             >
@@ -70,10 +77,10 @@ const Page = () => {
         </div>
       </div>
 
-      <BlogCategoryEditor 
+      <BlogCategoryEditor
         // props로 모달 열기/닫기 상태 전달
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </div>
   );

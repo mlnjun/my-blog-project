@@ -50,6 +50,7 @@ const Header = () => {
         await api.get('/api/auth/check');
       } catch (error) {
         if (error.response?.status === 401) {
+          cookies().delete('authToken');
           dispatch(logout());
           alert("인증이 만료되어 로그아웃 되었습니다.");
           router.refresh();

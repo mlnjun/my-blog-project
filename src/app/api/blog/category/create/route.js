@@ -13,7 +13,7 @@ export const POST = withAuth(async function (request) {
         }
 
         // 카테고리 이름 중복 검사
-        const existingCategory = await BlogCategory.findOne({ name });
+        const existingCategory = await BlogCategory.findOne({ where: { name } });
         if (existingCategory) {
             return NextResponse.json({ message: "이미 존재하는 카테고리 이름입니다." }, { status: 400 });
         }
