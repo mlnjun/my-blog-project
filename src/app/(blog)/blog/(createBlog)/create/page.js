@@ -12,6 +12,35 @@ const Page = () => {
   // 카테고리 데이터
   const [categories, setCategories] = useState([]);
 
+  // 게시글 데이터
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    category: "",
+    tags: [],
+  });
+
+  // 게시글 데이터 업데이트
+  const handleFormData = (key, value) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  // 게시글 내용 데이터 업데이트
+  const handleFormDataContent = (content) => {
+    setFormData((prev) => ({ ...prev, content: content }));
+  };
+
+  // 태그 입력 처리
+  const handleTagInput = (e) => {
+    // .trim() > 문자열 양쪽 끝의 공백 제거
+    const tag = e.target.value.trim();
+
+    if (tag && e.key === "Enter") {
+      setFormData((prev) => ({ ...prev, tags: [...prev.tags, tag] }));
+      e.target.value = "";
+    }
+  };
+
   // 카테고리 데이터 가져오기
   useEffect(() => {
     const fetchCategories = async () => {
@@ -29,6 +58,8 @@ const Page = () => {
           className="h2 my-1.5 p-2 w-full bg-white rounded-lg min-h-[36px] max-md:max-w-full box-border border-[2px] border-transparent focus:border-primary focus:border-opacity-30 focus:outline-none"
           type="text"
           placeholder="제목"
+          value={formData.title}
+          onChange={(e) => handleFormData("title", e.target.value)}
         />
 
         <hr />
@@ -38,16 +69,19 @@ const Page = () => {
             className="body-1 mt-2 p-2 w-[50%] bg-white rounded-lg min-h-[36px] max-md:max-w-full box-border border-[2px] border-transparent focus:border-primary focus:border-opacity-30 focus:outline-none"
             type="text"
             placeholder="태그 추가"
+            onKeyDown={handleTagInput}
           />
 
           <div className="my-2 p-2 w-[33%] flex gap-1.5">
             <select
               type="text"
               className="w-full bg-white rounded-lg min-h-[36px] max-md:max-w-full box-border border-[2px] border-n-5 focus:border-primary focus:border-opacity-30 focus:outline-none"
+              value={formData.category}
+              onChange={(e) => handleFormData("category", e.target.value)}
             >
               <option>카테고리</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.name}>
+              {categories.map((category, index) => (
+                <option key={index} value={category.name}>
                   {category.name}
                 </option>
               ))}
@@ -68,12 +102,20 @@ const Page = () => {
           <div className="font-semibold text-white bg-primary bg-opacity-80 p-2 border-[0.25px] rounded-lg">
             Node.js
           </div>
+          {formData.tags.map((tag, index) => (
+            <div
+              key={index}
+              className="font-semibold text-white bg-primary bg-opacity-80 p-2 border-[0.25px] rounded-lg"
+            >
+              {tag}
+            </div>
+          ))}
         </div>
 
         <hr />
 
         <div className="flex-1">
-          <Editor />
+          <Editor onUpdate={handleFormDataContent} />
         </div>
       </div>
 

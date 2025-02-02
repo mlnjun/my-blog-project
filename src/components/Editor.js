@@ -12,7 +12,7 @@ import Button from "./Button";
 
 import EditorMenuBar from "./EditorMenuBar";
 
-const Editor = () => {
+const Editor = ({ onUpdate }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -24,10 +24,16 @@ const Editor = () => {
       Placeholder.configure({ placeholder: "내용을 입력하세요..." }),
     ],
     content: "",
+
+    onUpdate: ({ editor }) => {
+      // ?. 옵셔널 체이닝 > 객체, 배열, 함수가 존재하는지 확인 후 존재하면 실행 없으면 스킵(오류 없음)
+      onUpdate?.(editor.getHTML()); // HTML 형식으로 상위 컴포넌트에 전달
+    },
   });
 
   return (
     <div className="relative">
+      {/* 버블 메뉴 */}
       {editor && (
         <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
           <div className="flex justify-self-start px-2 py-1 border-2 bg-n-1 rounded-t-lg">
